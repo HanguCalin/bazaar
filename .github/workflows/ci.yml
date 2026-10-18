@@ -13,7 +13,7 @@ jobs:
   windows-msvc:
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: ilammy/msvc-dev-cmd@v1 # puts cl.exe and ninja on PATH
       - run: cmake --preset ci-msvc
       - run: cmake --build --preset ci-msvc
@@ -22,7 +22,7 @@ jobs:
   linux-gcc:
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - run: sudo apt-get update && sudo apt-get install -y ninja-build
       - run: cmake --preset debug
       - run: cmake --build --preset debug
@@ -31,7 +31,7 @@ jobs:
   linux-asan:
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - run: sudo apt-get update && sudo apt-get install -y ninja-build
       - run: cmake --preset asan
       - run: cmake --build --preset asan
