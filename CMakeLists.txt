@@ -40,4 +40,3 @@ add_subdirectory(apps/browse_cli)
 
 enable_testing()
 add_subdirectory(tests)
-add_subdirectory(drills)

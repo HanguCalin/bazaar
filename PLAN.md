@@ -1,14 +1,19 @@
 # bazaar: 8-week C++ interview-prep project
 
 A small e-commerce backend written in C++20. Scope is fixed at **8 weeks at 8 to
-10 hours a week, about 70 to 80 hours total**, including the interview drills.
+10 hours a week, about 70 to 80 hours total**, including reading.
 Everything that interviewers ask about is in the core. Everything else is in the
 optional section at the end and can be ignored.
 
 Goal: be ready for C++ technical interviews. That means being able to (a) write
 correct, idiomatic modern C++, (b) implement and explain the standard data
-structures, (c) read and fix an existing codebase under a timer, and (d) talk
+structures, (c) read, debug and fix code in an existing codebase, and (d) talk
 about ownership, memory and threads with confidence.
+
+There are no separate interview problems. All the data structures and
+algorithms (graph traversal, hashing, LRU, heaps and top-K, tokenising,
+checksums, log replay) are built as parts of bazaar itself, so each one has a
+real reason to exist and real code to point at in an interview.
 
 ---
 
@@ -27,22 +32,17 @@ The loop for every week:
    or ask Claude to explain the concept against your own code.
 4. **Review.** Claude reviews your code the way an interviewer would: missing
    `const`, copies where moves belong, raw pointers that should be smart pointers,
-   O(n^2) where O(n log n) was available.
-5. **Drills.** Two interview problems per week on the same concept, each with
-   tests. Three times during the 8 weeks, a "broken repo" drill: a branch with a
-   planted bug and failing tests, fixed under a 45-minute timer. Many company
-   coding tests now work this way: you get an existing repo, not a blank page.
+   O(n^2) where O(n log n) was available. You fix what the review finds.
 
 Rules:
 
-- You write the module code. Claude writes scaffolding, tests, drills and
-  reviews. If Claude writes the hash map, you learn nothing.
+- You write the module code. Claude writes scaffolding, tests and reviews. If
+  Claude writes the hash map, you learn nothing.
 - Every week ends with a green test suite. If a week runs over, cut the week's
   stretch item, never the tests.
 - Commit at the end of every session. Small commits with clear messages.
-- Drills are timed and done without the IDE's help on the first attempt.
 
-Hour budget per week: 6 to 7 on the module, 2 on drills, 1 on reading.
+Hour budget per week: 7 to 9 on the module, 1 on reading.
 
 ---
 
@@ -129,7 +129,6 @@ bazaar/
   tests/                     GoogleTest, one file per module
   bench/                     Google Benchmark, from week 4
   data/                      sample json / jsonl files
-  drills/week01 .. week08/   interview problems with tests
   docs/WEEK1.md .. WEEK8.md  goal, deliverables, reading, done-criteria
 ```
 
@@ -163,8 +162,6 @@ looks like when MSVC in CI rejects code your local GCC accepted.
 
 **learncpp.** 2.1 to 2.11 (functions and files), 5.7 to 5.9 (`std::string`,
 `std::string_view`), 13.7 to 13.10 (structs), 12.15 (`std::optional`).
-
-**Drills.** Valid parentheses, two sum.
 
 **Done.** `cmake --preset debug`, build, `ctest` green locally with MinGW and on
 all three CI jobs; the loaders read the sample files and a test checks the
@@ -202,15 +199,7 @@ range-for.
 **DSA.** Iterative DFS over an adjacency list, visited sets, cycle detection,
 custom comparators.
 
-**Drills.** Number of islands, kth largest element in an array.
-
-**Broken-repo drill 1 (end of week).** 45 minutes, 3 planted bugs among:
-traversal skips the root or leaks into a sibling tree, region compared with
-`find` instead of `==`, tie-breaker reversed, `matched_count` after truncation,
-missing `max_results` default, results written out of input order.
-
-**Done.** All tests green, CLI matches the expected output for the sample data,
-broken branch fixed inside the timer.
+**Done.** All tests green, CLI matches the expected output for the sample data.
 
 ### Week 3: hash map
 
@@ -233,8 +222,6 @@ overloading, including `operator[]`).
 
 **DSA.** Hashing, collision strategies, amortised analysis.
 
-**Drills.** Design hash map (LeetCode 706), group anagrams.
-
 **Done.** Tests green locally and in the `linux-asan` CI job, including a test
 that stores a move-only value type such as `std::unique_ptr<int>`.
 
@@ -254,9 +241,6 @@ when raw pointers are fine (non-owning), `std::priority_queue` internals.
 heap storage, 18.4 (timing your code).
 
 **DSA.** LRU, binary heaps, top-K.
-
-**Drills.** LRU cache (146), kth largest in a stream (703), top K frequent
-elements (347).
 
 **Done.** Both containers green in the `linux-asan` CI job, the benchmark runs
 locally and you can explain the numbers in two sentences each.
@@ -278,12 +262,6 @@ Strategy pattern, composition over inheritance, `std::variant` and `std::visit`,
 25.1 to 25.6 (virtual functions), 20.1 (function pointers).
 
 **DSA.** String tokenising, simple scoring.
-
-**Drills.** Design a parking lot (OOP design, verbal plus code), min stack.
-
-**Broken-repo drill 2 (end of week).** Planted bugs: missing virtual destructor
-causing a leak reported by the `linux-asan` CI job, object slicing when a ranker is passed by value,
-`override` missing so a base method is silently called.
 
 **Done.** Swapping rankers requires no change to `BrowseEngine`; tests green.
 
@@ -309,8 +287,6 @@ arithmetic.
 
 **learncpp.** 21.5 to 21.11 (remaining operator overloading), 13.2 to 13.6
 (enums), 27.1 to 27.5 (exceptions), F.1 (constexpr functions).
-
-**Drills.** Merge intervals, meeting rooms II.
 
 **Done.** `Money` and the id types have tests for every operator; oversell is
 rejected in a test; clang-tidy is clean; README draft committed; checklist
@@ -339,8 +315,6 @@ avoidance by lock ordering.
 type, and "C++ Concurrency in Action" (Williams) chapters 2 to 4 if you want a
 book.
 
-**Drills.** Print in order (1114), implement a bounded blocking queue (1188).
-
 **Done.** The 16-thread stress test runs clean under TSan in CI, and the
 sharded `LruCache` measurably beats the single-mutex version in the benchmark.
 
@@ -364,12 +338,6 @@ crash test.
 **learncpp.** 28.1 to 28.7 (input and output), O.1 to O.3 (bit manipulation).
 
 **DSA.** Checksums, log-structured storage, idempotent replay.
-
-**Drills.** Serialize and deserialize binary tree (297), encode and decode
-strings (271).
-
-**Broken-repo drill 3.** A bug in a module you did not write recently, under
-45 minutes, covering a data race or an iterator invalidation.
 
 **Wrap-up.** Finish the README: architecture overview, and a table of Google
 Benchmark numbers for heap top-K vs full sort, cache hit vs recompute, and
@@ -402,8 +370,9 @@ as evidence:
 - How you'd shard a cache and what you'd measure.
 - What a write-ahead log guarantees, and what happens on a crash before and
   after the flush.
-- Walk through fixing a bug in unfamiliar code: reproduce with a test, narrow
-  down, fix, add a regression test.
+- Walk through fixing a bug: reproduce with a test, narrow down, fix, add a
+  regression test. Use a real bug from this repo (a review finding, a red CI
+  job or a sanitizer report) as the example.
 
 ---
 
@@ -435,8 +404,8 @@ Each is 1 to 2 weeks. None is needed for interviews at your target level.
 3. Tell Claude to scaffold week 1 and week 2 into
    `C:\Users\clutch\Desktop\Everything\Projects\bazaar`.
 4. Open the folder in VS Code, pick the `debug` preset, build, run CTest. Expect
-   51 tests: 1 passing and 50 failing. The failures are your week 1 and week 2
-   targets (`ctest -L week1`, `ctest -L week2`), drills included.
+   28 tests: 1 passing and 27 failing. The failures are your week 1 and week 2
+   targets (`ctest -L week1`, `ctest -L week2`).
 5. Commit and push. CI runs only the `week1` label (`TEST_LABELS` in
-   `ci.yml`) and fails on it until the week 1 loaders and drills are done.
+   `ci.yml`) and fails on it until the week 1 loaders are done.
    Each week you widen the label to include that week.

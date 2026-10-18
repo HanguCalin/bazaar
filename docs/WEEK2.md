@@ -38,7 +38,6 @@ tree must not overflow the stack.
 | `tests/test_catalog.cpp` | subtree, unknown category, isolation, cycles, depth |
 | `tests/test_browse_engine.cpp` | region, ordering with ties, default, truncation, order |
 | `tests/test_end_to_end.cpp` | the sample files through the whole pipeline |
-| `drills/week02/` | number of islands, kth largest |
 
 ## Your tasks
 
@@ -55,15 +54,8 @@ tree must not overflow the stack.
    ```
 4. **Widen CI**: in `.github/workflows/ci.yml`, change `TEST_LABELS` from
    `week1` to `week[12]`.
-5. **Drills**, timed, no IDE help on the first attempt.
 
 `ctest --preset debug -L week2` runs this week's tests.
-
-## Broken-repo drill 1 (end of week)
-
-When week 2 is green, ask Claude for the broken branch: 3 planted bugs, failing
-tests, 45 minutes on a timer. Reproduce, narrow down, fix, and keep a note of
-how you found each one.
 
 ## Reading (learncpp.com)
 
@@ -78,4 +70,3 @@ how you found each one.
 - `ctest --preset debug -L "week[12]"` is green locally and in all three CI
   jobs.
 - The CLI's `results.json` matches `data/expected_results.json`.
-- The broken branch is fixed inside the timer.

@@ -17,7 +17,6 @@ jobs, and a library that can read the three data files and write results.
 | `include/bazaar/json_io.hpp` | the four functions you implement this week |
 | `tests/test_model.cpp` | passes already: proves the toolchain works |
 | `tests/test_json_io.cpp` | your target this week |
-| `drills/week01/` | valid parentheses, two sum |
 
 ## Your tasks
 
@@ -33,9 +32,7 @@ jobs, and a library that can read the three data files and write results.
    - how you read JSON Lines one line at a time and skip blank lines;
    - why `json_io.hpp` does not include `<nlohmann/json.hpp>` (look at
      `target_link_libraries(bazaar PRIVATE ...)` in `CMakeLists.txt`).
-3. **Drills**, timed, no IDE help on the first attempt: write the solution on
-   paper or in a plain editor, then type it in and run the tests.
-4. **Read the CI logs once on purpose.** Push a deliberate MSVC-only or
+3. **Read the CI logs once on purpose.** Push a deliberate MSVC-only or
    GCC-only mistake on a branch (ask Claude for one if you can't think of
    one), watch which job fails and read its error, then delete the branch.
 
@@ -53,8 +50,7 @@ ctest --preset debug           # run all tests
 Useful variations:
 
 ```
-ctest --preset debug -L week1           # only this week's tests (module + drills)
-ctest --preset debug -L drill           # only the drills
+ctest --preset debug -L week1           # only this week's tests
 ctest --preset debug -R LoadRequests    # only tests whose name matches a regex
 ctest --preset debug -N                 # list tests without running them
 build\debug\tests\test_json_io.exe      # run one test program directly
