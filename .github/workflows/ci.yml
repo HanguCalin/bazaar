@@ -1,0 +1,38 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+env:
+  # Which test labels CI runs (a regex for `ctest -L`). Widen it as each week
+  # goes green: week1 -> week[12] -> week[1-3] ...
+  TEST_LABELS: week1
+
+jobs:
+  windows-msvc:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ilammy/msvc-dev-cmd@v1 # puts cl.exe and ninja on PATH
+      - run: cmake --preset ci-msvc
+      - run: cmake --build --preset ci-msvc
+      - run: ctest --preset ci-msvc -L "${{ env.TEST_LABELS }}"
+
+  linux-gcc:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - run: sudo apt-get update && sudo apt-get install -y ninja-build
+      - run: cmake --preset debug
+      - run: cmake --build --preset debug
+      - run: ctest --preset debug -L "${{ env.TEST_LABELS }}"
+
+  linux-asan:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - run: sudo apt-get update && sudo apt-get install -y ninja-build
+      - run: cmake --preset asan
+      - run: cmake --build --preset asan
+      - run: ctest --preset asan -L "${{ env.TEST_LABELS }}"

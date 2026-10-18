@@ -1,0 +1,8 @@
+{"query_id": "electronics-eu", "category_id": 1, "region": "EU"}
+{"query_id": "phones-eu-top3", "category_id": 2, "region": "EU", "max_results": 3}
+{"query_id": "home-eu", "category_id": 6, "region": "EU", "max_results": 10}
+{"query_id": "unknown-category", "category_id": 42, "region": "EU"}
+{"query_id": "laptops-us", "category_id": 3, "region": "US"}
+{"query_id": "books-us", "category_id": 9, "region": "US"}
+{"query_id": "kitchen-euwest", "category_id": 7, "region": "EU-West", "max_results": 2}
+{"query_id": "smartphones-eu-top1", "category_id": 4, "region": "EU", "max_results": 1}

@@ -1,0 +1,10 @@
+[
+    { "query_id": "electronics-eu", "matched_count": 7, "product_ids": [102, 101, 106, 115, 104] },
+    { "query_id": "phones-eu-top3", "matched_count": 5, "product_ids": [102, 101, 104] },
+    { "query_id": "home-eu", "matched_count": 3, "product_ids": [109, 114, 111] },
+    { "query_id": "unknown-category", "matched_count": 0, "product_ids": [] },
+    { "query_id": "laptops-us", "matched_count": 1, "product_ids": [107] },
+    { "query_id": "books-us", "matched_count": 0, "product_ids": [] },
+    { "query_id": "kitchen-euwest", "matched_count": 1, "product_ids": [110] },
+    { "query_id": "smartphones-eu-top1", "matched_count": 2, "product_ids": [102] }
+]
