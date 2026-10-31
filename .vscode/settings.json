@@ -1,0 +1,15 @@
+{
+    "cmake.useCMakePresets": "always",
+    "cmake.configureOnOpen": true,
+    "C_Cpp.intelliSenseEngine": "disabled",
+    "clangd.arguments": [
+        "--query-driver=C:/msys64/ucrt64/bin/*.exe",
+        "--header-insertion=never"
+    ],
+    "[cpp]": {
+        "editor.defaultFormatter": "llvm-vs-code-extensions.vscode-clangd",
+        "editor.formatOnSave": true
+    },
+    "files.eol": "\n",
+    "files.insertFinalNewline": true
+}
