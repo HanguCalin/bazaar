@@ -40,8 +40,10 @@ and the code are yours.
 
 1. **Spec.** Claude writes `docs/WEEKn.md`: what the feature must do, inputs and
    outputs, edge cases, the design questions to answer, and the two or three
-   learncpp lessons that matter. One week at a time, so each spec builds on the
-   design you actually have.
+   learncpp lessons that matter. Alongside it, `docs/WEEKn_EXPLANATIONS.md`
+   gives the background for each task: how the tools and libraries work, what
+   each design option costs, and small examples on a different problem. One
+   week at a time, so each spec builds on the design you actually have.
 2. **Design.** You write the headers for the week: classes, function
    declarations, data members, no function bodies yet. Add a few lines to
    `docs/DESIGN.md` answering the week's design questions. Commit
@@ -131,7 +133,8 @@ on day one; everything else appears when a week needs it.
 bazaar/
   PLAN.md                    this file                                  now
   README.md                                                             now
-  docs/WEEKn.md              one spec per week, written just in time    now (week 1)
+  docs/WEEKn.md              one spec per week (tasks), just in time    now (week 1)
+  docs/WEEKn_EXPLANATIONS.md background for that week's tasks           now (week 1)
   docs/DESIGN.md             your answers to each week's design questions
   data/                      sample input and expected output           now
   .clang-format .clangd .vscode/                                        now
@@ -176,7 +179,7 @@ public header mention nlohmann-json at all?
 Definition Rule, static libraries, `std::string_view`, `std::optional`, structs
 with default member initialisers.
 
-**learncpp.** 2.1 to 2.11, 5.7 to 5.9, 13.7 to 13.10, 12.15.
+**learncpp.** 0.5, 2.7 to 2.12, 7.9, 5.7 to 5.9, 13.7 to 13.10, 12.15.
 
 **Done.** The loaders read the sample files and the tests check the results;
 green locally and on all three CI jobs.
@@ -460,7 +463,8 @@ Each is 1 to 2 weeks. None is needed for interviews at your target level.
 ## 7. First steps
 
 1. Read section 1 again. The roles matter more than anything else in this file.
-2. Open `docs/WEEK1.md` and do the orientation exercise.
+2. Open `docs/WEEK1.md` and do the orientation exercise, reading the sections
+   of `docs/WEEK1_EXPLANATIONS.md` it points to.
 3. Design the week 1 headers, commit them, and ask for a design review.
 4. Claude adds the CMake build, CI and the week 1 tests; you explain the CMake
    back, then implement until green.

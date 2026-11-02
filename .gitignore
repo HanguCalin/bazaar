@@ -1,3 +1,4 @@
 build/
 .cache/
 results.json
+docs/*_EXPLANATIONS.md
