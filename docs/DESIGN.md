@@ -20,9 +20,20 @@ constructor is `explicit`, brace lists without the type name don't compile:
 become `Product p{...};`, `return Product{...};` and
 `products.push_back(Product{...});` (or `emplace_back(...)`).
 
-No record has a rule tying its own fields together. The spec doesn't say
-`parent_id != id`, `max_results > 0`, `popularity_score >= 0` or a non-empty
-`region`. "Every product belongs to an existing category" is a real rule, but a
+**`Result`'s rule.** `matched_count` is the number of matches before the list is
+cut to the first N, and `product_ids` holds those N. So `matched_count` can't be
+negative or smaller than `product_ids.size()`. Equal is fine: nothing was cut.
+The constructor enforces this and throws `std::invalid_argument` otherwise.
+Why: the fields are private and there are no setters, so a check made once in
+the constructor holds for the object's whole life. That's the payoff of
+choosing a class. Why not `DataError`: a bad `Result` is a bug in the code that
+built it (week 2's engine), not a problem with a file. `main` catches
+`const std::exception&`, so it still prints a message. Cost: building a
+`Result` can now throw, and the caller must pass consistent values.
+
+The other three records have no rule tying their own fields together. The spec
+doesn't say `parent_id != id`, `max_results > 0`, `popularity_score >= 0` or a
+non-empty `region`. "Every product belongs to an existing category" is a real rule, but a
 single `Product` can't check it, because it can't see the categories. That rule
 belongs to whatever type owns both lists in week 2.
 

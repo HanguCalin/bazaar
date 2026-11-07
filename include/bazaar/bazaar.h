@@ -46,6 +46,12 @@ private:
     std::vector<int> product_ids;
 
 public:
+    // `matched_count` is the number of matches before the list was cut to the
+    // first N, so it can't be smaller than `product_ids.size()`. Equal is fine:
+    // nothing was cut.
+    //
+    // Throws std::invalid_argument if `matched_count` is negative or smaller
+    // than `product_ids.size()`.
     explicit Result(std::string query_id, int matched_count, std::vector<int> product_ids);
 
     std::string get_query_id() const;
