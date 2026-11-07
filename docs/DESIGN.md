@@ -20,9 +20,20 @@ constructor is `explicit`, brace lists without the type name don't compile:
 become `Product p{...};`, `return Product{...};` and
 `products.push_back(Product{...});` (or `emplace_back(...)`).
 
-No record has a rule tying its own fields together. The spec doesn't say
-`parent_id != id`, `max_results > 0`, `popularity_score >= 0` or a non-empty
-`region`. "Every product belongs to an existing category" is a real rule, but a
+**`Result`'s rule.** `matched_count` is the number of matches before the list is
+cut to the first N, and `product_ids` holds those N. So `matched_count` can't be
+negative or smaller than `product_ids.size()`. Equal is fine: nothing was cut.
+The constructor enforces this and throws `std::invalid_argument` otherwise.
+Why: the fields are private and there are no setters, so a check made once in
+the constructor holds for the object's whole life. That's the payoff of
+choosing a class. Why not `DataError`: a bad `Result` is a bug in the code that
+built it (week 2's engine), not a problem with a file. `main` catches
+`const std::exception&`, so it still prints a message. Cost: building a
+`Result` can now throw, and the caller must pass consistent values.
+
+The other three records have no rule tying their own fields together. The spec
+doesn't say `parent_id != id`, `max_results > 0`, `popularity_score >= 0` or a
+non-empty `region`. "Every product belongs to an existing category" is a real rule, but a
 single `Product` can't check it, because it can't see the categories. That rule
 belongs to whatever type owns both lists in week 2.
 
@@ -45,13 +56,26 @@ References to other records keep it (`product.category_id`,
 JSON file and `Result` use that name too, and one value should have one name
 (`result.query_id` comes from `request.query_id`).
 
+**Getter names.** Each getter is `get_` plus the field name: `get_id()`,
+`get_name()`, `get_parent_id()`, `get_product_ids()`. Why: a class can't have a
+data member and a function with the same name, so `int id;` and `int id()
+const;` can't both exist. The prefix lets the private members keep the plain
+field names, which match the JSON keys, and no member naming convention such as
+`id_` or `m_id` is needed. Cost: calls are a little longer
+(`p.get_region()` instead of `p.region()`), and it differs from the standard
+library, which uses plain names (`size()`, `begin()`). In the constructor, the
+parameters have the same names as the members, so a parameter hides its member.
+The member initialiser list `name(std::move(name))` still does the right thing:
+the part outside the parentheses is always the member. But inside the
+constructor body, `name` means the parameter.
+
 **Getter return types.** Every getter returns by value
-(`std::string name() const`). Why: it's the simplest to read and can never
+(`std::string get_name() const`). Why: it's the simplest to read and can never
 dangle, because the caller always gets its own copy. bazaar is a learning
 project, not a race for speed. Cost: every call to a text or vector getter makes
 a copy. That means a heap allocation for strings longer than about 15
-characters, and for any non-empty vector. `p.region() == req.region()` copies
-two strings, and `for (int id : result.product_ids())` loops over a copy of the
+characters, and for any non-empty vector. `p.get_region() == req.get_region()`
+copies two strings, and `for (int id : result.get_product_ids())` loops over a copy of the
 vector. That's fine for this data size. The week 6 benchmarks can show whether
 it ever matters, and switching to `const std::string&` later only changes the
 header, not the callers.
@@ -80,7 +104,7 @@ one line. It also takes 8 bytes instead of 4.
 ### 3. The default of 5 for `max_results`
 
 **Decision.** In the week 2 engine. It reads
-`request.max_results().value_or(kDefaultMaxResults)` at the moment it uses the
+`request.get_max_results().value_or(kDefaultMaxResults)` at the moment it uses the
 value, with the 5 kept in a named constant.
 
 **Why.** The record stays a faithful copy of the file, which WEEK1.md §2.3
@@ -120,6 +144,18 @@ passed in*. A `std::string` goes into the message unchanged. A
 quotes (`"data/products.json"`), and on Windows it stores wide characters, so
 `.string()` can fail on a non-ASCII file name. Cost: the type doesn't say "this
 is a path".
+
+**Writer signature.**
+`void write_results(const std::string& path, const std::vector<Result>& results)`.
+The results are taken by `const&`: the writer only reads them, so nothing is
+copied (by value would copy every `Result` and its `product_ids` vector), and
+`const` promises the caller's vector isn't changed. The path comes first, the
+same as in the loaders, where it is the first and only parameter. It returns
+`void`, because failure is reported by throwing `DataError` (question 5), so
+there's nothing to report on success. A `bool` would give a second way to
+report failure, and one that callers could ignore. Cost: it only accepts a
+`std::vector<Result>`. `std::span<const Result>` (C++20) would also accept an
+array or part of a vector without copying, but nothing needs that yet.
 
 ### 5. Reporting failure
 
